@@ -1,0 +1,525 @@
+@import "helper-methods.scss";
+$primary-black:lighten(black, 45%);
+$topnav-blue:#1479d3e0;
+$primary-blue: #6b93ef;
+$search-background:#c7ddf5;
+$header-color:#fff;
+$sidebar-background:#eee;
+$delete-icon-color:#ff0000bd;
+$heading-padding:15px;
+.container {
+  height: 97vh;
+}
+html , body , .App , #root {
+  height:100%;
+}
+body {
+  color: $primary-black;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+button {
+  outline: none;
+  border: none;
+  background-color: #fff;
+  color: $primary-black;
+  cursor: pointer;
+}
+
+.m-b-40 {
+  margin-bottom: 40px;
+}
+
+p {
+  margin: auto;
+}
+input[type=date]::-webkit-inner-spin-button, input[type=date]::-webkit-clear-button {
+  -webkit-appearance: none;
+  display: none;
+}
+@mixin nav-ul {
+  list-style-type: none;
+}
+@mixin date-picker {
+  margin: auto;
+  height:16px;
+  font-size: 13px;
+  display: none;
+  background-color: transparent;
+  border: 1px solid #3a6bff;
+  color: inherit;
+  text-align: center;
+  font-size: 15px;
+  border-radius: 5px;
+  outline:none;
+}
+
+nav.topnav {
+  background-color: $topnav-blue;
+  font-size: 20px;
+  ul {
+    @include nav-ul();
+    text-align: center;
+  }
+  li.topnav-left {
+    display: block;
+    float: left;
+  }
+  a:link,
+  a:visited {
+    color: $primary-black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  li.topnav-left p {
+    display: inline;
+    color: $header-color;
+  }
+  li.topnav-center {
+    display: inline-block;
+    border-radius: 5px;
+    height: 38px;
+    background-color: $search-background;
+    button.search-icon i {
+      font-size: 19px;
+    }
+    button.search-icon {
+      border: none;
+      height: 36px;
+      width: 40px;
+      color: $primary-blue;
+      background-color: transparent;
+    }
+    .search-input {
+      border: none;
+      height: 36px;
+      background-color: transparent;
+      width:82%;
+      outline: none;
+      font-size: 17px;
+      color: $primary-blue;
+      &::placeholder {
+        color: $primary-blue;
+        font-size: 17px;
+      }
+    }
+  }
+}
+
+.page-content {
+  height: 94%;
+  display: inline-flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.sidebar {
+  width: 22%;
+  transition: width 0.4s;
+  height: 100%;
+  font-size: 18.5px;
+  overflow-y: auto;
+  ul {
+    @include nav-ul();
+    background-color: $sidebar-background;
+    height: 94%;
+    a:link,
+    a:visited {
+      color: $primary-black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    li {
+      display: flex;
+      width: 100%;
+      height: 40px;
+      background-color: $sidebar-background;
+      i {
+        width: 22px;
+      }
+      ul {
+        width: 100%;
+        list-style-type: none;
+        padding-left: inherit;
+        li {
+          cursor: pointer;
+          }
+        }
+      }
+    }
+    li.active {
+      background: #c5c5c578;
+      font-weight: bold;
+    }
+    .sidenav-blue {
+      color: #7f9bef;
+    }
+    .add-list-li {
+      position: sticky;
+      bottom:5px;
+      p {
+        margin: 0;
+        margin-left: 25px;
+        width: 100%;
+      }
+      input {
+        border: none;
+        outline: none;
+        width: 100%;
+        height: 100%;
+        font-size: 16px;
+        color: #737373;
+        background-color: #ededed;
+        &::placeholder {
+          font-size: 16px;
+          color: $primary-blue;
+          font-weight: bold;
+        }
+        &:focus {
+          background-color: #ffff;
+          border: 1px solid $primary-black;
+        }
+    }
+  }
+}
+.todo {
+  width: 70%;
+  display: none;
+  transition: width 0.40s;
+  display: inline-flex;
+  .task-content {
+    height: 100%;
+    width: 75%;
+  ul.list {
+    @include nav-ul();
+  }
+  .heading {
+    i {
+      font-size: 20px;
+    }
+    width: 100%;
+    .heading-left {
+      display: inline-block;
+      padding: $heading-padding;
+      font-size: 28px;
+      color: $primary-blue;
+      font-weight: bold;
+      input.list-rename-input {
+        outline:none;
+        background-color: transparent;
+        border:none;
+        font-size:28px;
+        &::placeholder {
+          font-size:28px;
+        }
+        &:focus {
+          border:1px solid black;
+          width:100%;
+        }
+      }
+    }
+    .heading-right {
+      padding: $heading-padding;
+      color: $primary-blue;
+      float: right;
+      text-align: right;
+      i {
+        display: inline-block;
+      }
+      i.delete-list-icon {
+        cursor: pointer;
+        margin-right:10px;
+        color:$delete-icon-color;
+      }
+      button {
+        font-size: 18.5px;
+        display: inline;
+        font-weight: bold;
+        color: $primary-blue;
+      }
+
+    }
+  }
+  ul.tasks {
+    overflow: auto;
+    height: 91%;
+    @include nav-ul;
+    width: 100%;
+    padding-left: 0px;
+    li.task {
+      transition: height 3s;
+      padding: 20px 0px;
+      margin: 0px 2.5%;
+      word-break: break-all;
+      border-bottom: 1px solid #6e6e6e52;
+      position: relative;
+      i {
+        position: absolute;
+        top: 35%;
+        font-size: 20px;
+        padding:5px 6px;
+      }
+      div {
+        display: inline-block;
+        width: 90%;
+        margin-left: 45px;
+        max-height: 40px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-wrap: break-word;
+        white-space: nowrap;
+        word-break: break-all;
+      }
+      i.fa-check-circle-o + div {
+        text-decoration: line-through;
+      }
+      .fav {
+        float: right;
+        margin-right: 10px;
+      }
+      input.add-input {
+        border: none;
+        outline: none;
+        width: 80%;
+        height: 61px;
+        margin-left: 45px;
+        color: #737373;
+        &:placeholder {
+          font-size: inherit;
+          color: #737373;
+        }
+      }
+      .add-button {
+        position: static;
+        margin: 21px 30px;
+        float: right;
+        font-size: 17px;
+        color: $primary-blue;
+        display: none;
+      }
+      .active {
+        display: block;
+      }
+    }
+    li:last-child {
+      position: sticky;
+      padding:0;
+      bottom: 5px;
+      background: white;
+    }
+    li:not(:last-child) {
+      cursor: pointer;
+    }
+    li.active {
+      background-color: #c7ddf54a;
+      button {
+        background-color: transparent;
+      }
+    }
+    a:link,
+    a:visited {
+      color: $primary-black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+}
+}
+.show-todo {
+  display: inline-flex;
+}
+
+.task-description {
+  width: 30%;
+  overflow: hidden;
+  background-color: #ededed;
+  //transform: translateX(110%);
+  transition: width 0.40s;
+  a:link,
+  a:visited {
+    color: $primary-black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .card {
+    font-size: 18.5px;
+    border: 1px solid #eee;
+    margin: 5px 10px 15px 10px;
+    padding: 5px;
+    background-color: #fff;
+    i {
+      font-size: 18px;
+      margin-right:12px;
+    }
+  }
+  .task-details {
+    margin-top: 10px;
+    display: flex;
+    height:100px;
+    i.fa-check-circle-o + textarea {
+      text-decoration: line-through;
+    }
+    i {
+      padding: 10px 2px;
+      display: inline-block;
+      width: 10%;
+      text-align: center;
+      height: max-content;
+      cursor: pointer;
+    }
+    .fav {
+      display: inline-block;
+      width: 10%;
+      text-align: center;
+      float: right;
+    }
+    .task-text {
+      display: inline-block;
+      font-weight: bold;
+      min-width: 80%;
+      margin-left: 5px;
+      font-size: 21px;
+      max-height: 155px;
+      overflow: auto;
+      resize: none;
+      border:none;
+      outline:none;
+      background-color: transparent;
+      color:inherit;
+    }
+  }
+  .add-to-day {
+    button {
+      font-size: 16px;
+      width: 100%;
+      height: 45px;
+      text-align: left;
+      display: inline-flex;
+    }
+  }
+  .settings {
+    i {
+      margin : auto 10px; 
+    }
+    & > div {
+      font-size: 16px;
+      width: 100%;
+      text-align: left;
+      height: 45px;
+      display: inline-flex;
+    }
+    div:not(:first-child) {
+      padding-top: 10px;
+    }
+    div:not(:last-child) {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #6e6e6e52;
+    }
+    .due-date-picker {
+      @include date-picker();
+    }
+    .reminder-date-picker {
+      @include date-picker(); 
+    }
+    .repeat-selection {
+      width: 32%;
+      margin: auto;
+      border: none;
+      background: transparent;
+      border: 1px solid #3a6bff;
+      font-size: 15.5px;
+      color: inherit;
+      border-radius: 5px;
+      display: none;
+      outline:none;
+    }
+    .display-inline-block {
+      display: inline-block;
+    }
+  }
+  .letter-count {
+    float : right;
+    margin:auto 20px;
+
+  }
+  textarea.note-card {
+    font-size: 16.5px;
+    border: 1px solid #eee;
+    margin: 10px;
+    width: 89%;
+    height: 15%;
+    padding: 13px;
+    color: $primary-black;
+    background-color: #fff;
+    outline: none;
+    resize: none;
+    &::placeholder {
+      font-family: inherit;
+      font-size: 16.5px
+    }
+  }
+  .bottom-settings {
+    position: relative;
+    top: 60px;
+    right: 0;
+    display: inline-flex;
+    height: 50px;
+    width: 100%;
+    border-top: 1px solid #6e6e6e52;
+    padding-top: 10px;
+    background-color: transparent;
+    button.toggle-slider {
+      width: 10%;
+      font-size: 18px;
+      background-color: transparent;
+      i {
+        color: $primary-black;
+      }
+    }
+    button.delete-task {
+      width: 10%;
+      font-size: 18px;
+      background-color: transparent;
+      color:$primary-blue;
+      border-radius: 50%;
+      i {
+        color: $delete-icon-color;
+      }
+    }
+  }
+}
+
+.list-open {
+  width: 55%;
+  transition: width 0.40s;
+}
+
+.desc-open {
+  width: 30%;
+  transform: translateX(0%);
+  transition: width 0.40s;
+  display: inline;
+}
+
+.sidebar-collapse {
+  width: 4%;
+  ul a li p,
+  ul a li div,
+  ul li ul li p,
+  ul li ul li div {
+    display: none;
+    white-space: nowrap;
+  }
+}
+
+.todo-full-width {
+  width: 100%;
+}
+
+.my-day {
+  margin:auto;
+  display: none;
+}
+.show-day {
+  display: inline;
+}

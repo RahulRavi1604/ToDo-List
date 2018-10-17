@@ -472,6 +472,7 @@ nav.topnav li.topnav-center .search-input::placeholder {
   width: 100%;
   height: 40px;
   background-color: #eee;
+  cursor: pointer;
 }
 
 .sidebar ul li i {

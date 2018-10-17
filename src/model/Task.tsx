@@ -10,6 +10,7 @@ class Task {
     private important: boolean;
     private repeat: string;
     private listId : number;
+    private active : boolean;
     constructor(id : number, name : string, addedToDay : boolean, note : string, createdDate : Date, dueDate : Date,
              reminderDate : Date, completed :boolean, important : boolean, repeat : string) {
         this.id = id;
@@ -86,8 +87,14 @@ class Task {
     public getListId(): number {
         return this.listId;
     }
-    public setListId(): number {
-        return this.listId;
+    public setListId(listId : number):  void {
+        this.listId = this.listId;
+    }
+    public isActive(): boolean {
+        return this.active;
+    }
+    public setActive(active : boolean) : void {
+        this.active = active;
     }
 }
 export default Task;

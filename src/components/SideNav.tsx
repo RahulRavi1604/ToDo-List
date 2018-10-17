@@ -2,33 +2,72 @@ import * as React from 'react';
 
 import List from '../model/List';
 import Store from '../model/Store';
+import IListAttribute from './IListAttribute';
+ import ListItem from './ListItem';
 import Lists from './Lists';
 import MyDay from './MyDay';
 import ToDo from './ToDo';
 
-class SideNav extends React.Component<{}, { inputValue: string, isExpanded: boolean, store: List[] }> {
+class SideNav extends React.Component<{}, { activeLi: string, inputValue: string, isExpanded: boolean, store: List[], activeListIndex : number }> {
 
-  constructor(props: React.ReactPropTypes) {
+  private mainList: IListAttribute[] = [
+    {
+      active : false,
+      className: "my-day-li" ,
+      iconClassName: "fa fa-sun-o m-y-auto m-l-20",
+      listName: "My Day",
+      numberOfTasks: 0,
+      numberOfTasksDivClassName: "m-y-auto m-r-10",
+      paragraphClassName: "m-l-20",
+    },
+    {
+      active : false,
+      className: "important-li" ,// + (this.state.activeLi === "important" ? ' active' : ''),
+      iconClassName: "fa fa-star-o m-y-auto  m-l-20",
+      listName: "Important",
+      numberOfTasks: 0,
+      numberOfTasksDivClassName: "m-y-auto m-r-10",
+      paragraphClassName: "m-l-20",
+    },
+    {
+      active : false,
+      className: "planned-li",//  + (this.state.activeLi === "planned" ? ' active' : ''),
+      iconClassName: "fa fa-calendar m-y-auto  m-l-20",
+      listName: "Planned",
+      numberOfTasks: 0,
+      numberOfTasksDivClassName: "m-y-auto m-r-10",
+      paragraphClassName: "m-l-20",
+    },
+    {
+      active : false,
+      className: "tasks-li" ,// + (this.state.activeLi === "tasks" ? ' active' : ''),
+      iconClassName: "fa fa-home sidenav-blue m-y-auto  m-l-20",
+      listName: "Tasks",
+      numberOfTasks: 0,
+      numberOfTasksDivClassName: "m-y-auto m-r-10",
+      paragraphClassName: "m-l-20",
+    }
+  ];
+  constructor(props:any) {
     super(props);
     this.state = {
+      activeLi: "my-day",
+      activeListIndex : 0,
       inputValue: "",
       isExpanded: true,
       store: Store
     };
-    this.addNewList = this.addNewList.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.toggleCollapse = this.toggleCollapse.bind(this);
   }
 
   public addNewList = () => {
     const inputText = this.state.inputValue;
     if (inputText !== "") {
       this.setState({
-        inputValue : "" ,
+        inputValue: "",
         store: this.state.store.concat([new List(
-          this.state.store.length !== 0 ? this.state.store[this.state.store.length - 1].getId() + 1 : 0 ,
+          this.state.store.length !== 0 ? this.state.store[this.state.store.length - 1].getId() + 1 : 0,
           inputText, 0, [], false)])
-           });
+      });
     }
   };
   public handleInputChange = (element: React.FormEvent<HTMLInputElement>): void => {
@@ -38,56 +77,39 @@ class SideNav extends React.Component<{}, { inputValue: string, isExpanded: bool
   public toggleCollapse = () => {
     this.setState({ isExpanded: !this.state.isExpanded });
   };
-
+  public handleOnClickList = (event : any) => {
+    this.setState ( {
+      activeListIndex : (event.target.id).split("list")[1] - 1 
+    });
+  }
   public render() {
+    const { isExpanded } = this.state;
     return (
       <div className="page-content">
-        <nav className={"sidebar " + (this.state.isExpanded ? "" : "sidebar-collapse")}>
+        <nav className={`sidebar ${isExpanded ? "" : "sidebar-collapse"}`}>
           <ul className="m-y-auto p-l-0 p-y-20">
-            <li><a href="#"><i className="fa fa-bars m-t-10 m-l-20 m-y-auto" onClick={this.toggleCollapse} /></a></li>
-            <a href="#">
-              <li className="my-day-li active">
-                <i className="fa fa-sun-o m-y-auto m-l-20" />
-                <p className="m-l-20">My Day</p>
-                <div className="m-y-auto m-r-10" />
-              </li>
-            </a>
-            <a href="#">
-              <li>
-                <i className="fa fa-star-o m-y-auto  m-l-20" />
-                <p className="m-l-20">Important</p>
-                <div className="m-y-auto m-r-10" />
-              </li>
-            </a>
-            <a href="#">
-              <li>
-                <i className="fa fa-calendar m-y-auto  m-l-20" />
-                <p className="m-l-20">Planned</p>
-                <div className="m-y-auto m-r-10" />
-              </li>
-            </a>
-            <a href="#">
-              <li className="list"><i className="fa fa-home sidenav-blue m-y-auto  m-l-20" />
-                <p className="m-l-20">Tasks</p>
-                <div className="m-y-auto m-r-10" />
-              </li>
-            </a>
+            <li>
+              <a href="#">
+                <i className="fa fa-bars m-t-10 m-l-20 m-y-auto" onClick={this.toggleCollapse} />
+              </a>
+            </li>
+            {this.mainList.map(ListItem)}
             <li>
               <ul className="lists">
-                <Lists lists={this.state.store} />
+                <Lists lists={this.state.store} handleOnClickList = {this.handleOnClickList} />
                 <li className="add-list-li">
                   <i className="fa fa-plus sidenav-blue m-y-auto  m-l-20 add-list" onClick={this.addNewList} />
                   <p className="m-l-20 sidenav-blue">
-                    <input type="text" maxLength={20} className="add-list-input" placeholder="New List" value={this.state.inputValue} onChange={this.handleInputChange} />
+                    <input type="text" maxLength={20} className="add-list-input" placeholder="New List"
+                      value={this.state.inputValue} onChange={this.handleInputChange} />
                   </p>
-                  <div className=" m-r-10 m-y-auto" />
                 </li>
               </ul>
             </li>
           </ul>
         </nav>
         <MyDay />
-        <ToDo />
+        <ToDo tasks = {this.state.store[this.state.activeListIndex].getTasks()}/>
       </div>
     );
   }

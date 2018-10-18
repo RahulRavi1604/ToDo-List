@@ -1,6 +1,9 @@
 import * as React from 'react';
 
-class TaskDescription extends React.Component {
+import Task from '../model/Task';
+
+class TaskDescription extends React.Component<{ task : Task, renameTask : () => void, 
+toggleStatus : (event : any) => void, toggleImportant : (event : any) => void},{}> {
   public render() {
     return (
       <div className="task-description">

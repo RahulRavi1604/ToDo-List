@@ -8,7 +8,7 @@ import Lists from './Lists';
 import MyDay from './MyDay';
 import ToDo from './ToDo';
 
-class SideNav extends React.Component<{}, { activeLi: string, inputValue: string, isExpanded: boolean, store: List[], activeListIndex : number }> {
+class SideNav extends React.Component<{}, { activeLi: string, listInputValue: string, isExpanded: boolean, store: List[], activeListIndex : number }> {
 
   private mainList: IListAttribute[] = [
     {
@@ -53,34 +53,57 @@ class SideNav extends React.Component<{}, { activeLi: string, inputValue: string
     this.state = {
       activeLi: "my-day",
       activeListIndex : 0,
-      inputValue: "",
       isExpanded: true,
-      store: Store
+      listInputValue: "",
+      store: Store.getStore()
     };
   }
 
   public addNewList = () => {
-    const inputText = this.state.inputValue;
+    const inputText = this.state.listInputValue;
     if (inputText !== "") {
       this.setState({
-        inputValue: "",
-        store: this.state.store.concat([new List(
-          this.state.store.length !== 0 ? this.state.store[this.state.store.length - 1].getId() + 1 : 0,
-          inputText, 0, [], false)])
+        listInputValue: "",
+        store: Store.addNewList(inputText)
       });
     }
   };
+  public toggleTaskStatus = (taskId : number): void => {
+    alert("toggleTask" + taskId);
+  }
   public handleInputChange = (element: React.FormEvent<HTMLInputElement>): void => {
     const inputText = element.currentTarget.value.trim() === null ? "" : element.currentTarget.value;
-    this.setState({ inputValue: inputText });
+    this.setState({ listInputValue: inputText });
   }
   public toggleCollapse = () => {
     this.setState({ isExpanded: !this.state.isExpanded });
   };
+  public getTargetListId = (event : any) : string => {
+     if (event.target.classList.contains("list")) {
+      return (event.target.id).split("list")[1];
+     } else {
+      return (event.target.parentElement.id).split("list")[1];
+     }
+  }
   public handleOnClickList = (event : any) => {
-    this.setState ( {
-      activeListIndex : (event.target.id).split("list")[1] - 1 
-    });
+    const listElementId = parseInt(this.getTargetListId(event),10);
+    Store.setActiveList(listElementId)
+    this.setState ( 
+      {activeListIndex : listElementId}
+    );}
+  public changeActiveListIndex = (element: React.FormEvent<HTMLInputElement>) => {
+     this.state.store[this.state.activeListIndex].setName(element.currentTarget.value);
+     return this.state.store;
+  }
+  public renameList = (element: React.FormEvent<HTMLInputElement>) => {
+    this.setState(
+      {store : this.changeActiveListIndex(element)}
+    );
+  }
+  public updateNumberOfTasks = (listId : number) => {
+    this.setState({
+      store : Store.incrementNumberOfTasks(listId)
+    })
   }
   public render() {
     const { isExpanded } = this.state;
@@ -96,12 +119,12 @@ class SideNav extends React.Component<{}, { activeLi: string, inputValue: string
             {this.mainList.map(ListItem)}
             <li>
               <ul className="lists">
-                <Lists lists={this.state.store} handleOnClickList = {this.handleOnClickList} />
+                <Lists lists={this.state.store} handleOnClickList = {this.handleOnClickList}/>
                 <li className="add-list-li">
                   <i className="fa fa-plus sidenav-blue m-y-auto  m-l-20 add-list" onClick={this.addNewList} />
                   <p className="m-l-20 sidenav-blue">
                     <input type="text" maxLength={20} className="add-list-input" placeholder="New List"
-                      value={this.state.inputValue} onChange={this.handleInputChange} />
+                      value={this.state.listInputValue} onChange={this.handleInputChange} />
                   </p>
                 </li>
               </ul>
@@ -109,7 +132,9 @@ class SideNav extends React.Component<{}, { activeLi: string, inputValue: string
           </ul>
         </nav>
         <MyDay />
-        <ToDo tasks = {this.state.store[this.state.activeListIndex].getTasks()}/>
+        <ToDo listName = {this.state.store[this.state.activeListIndex].getName()} listId = {this.state.activeListIndex}
+              tasks = {this.state.store[this.state.activeListIndex].getTasks()}
+              updateNumberOfTasks = {this.updateNumberOfTasks} renameList = {this.renameList} toggleTaskStatus = {this.toggleTaskStatus}/>
       </div>
     );
   }

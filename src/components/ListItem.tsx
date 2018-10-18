@@ -4,7 +4,7 @@ import IListAttribute from './IListAttribute';
 
 export default function ListItem(attribute : IListAttribute) {
     return (
-        <li key={attribute.listName} className={attribute.className + attribute.active ?" ":" active"}
+        <li key={attribute.listName} className={attribute.className}
          id={attribute.listId}
               onClick={attribute.onClickEventSuccessFunction}>
             <i className={attribute.iconClassName} />

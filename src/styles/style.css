@@ -683,6 +683,7 @@ nav.topnav li.topnav-center .search-input::placeholder {
 }
 
 .todo .task-content ul.tasks li.task input.add-input {
+  font-size: inherit;
   border: none;
   outline: none;
   width: 80%;

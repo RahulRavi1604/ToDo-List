@@ -1,6 +1,6 @@
 
 interface IListAttribute {
-    active : boolean,
+    active?: boolean,
     className: string,
     iconClassName: string,
     paragraphClassName: string,

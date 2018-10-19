@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import IListAttribute from './IListAttribute';
 
-export default function ListItem(attribute : IListAttribute) {
+export default function ListItem(attribute: IListAttribute) {
     return (
         <li key={attribute.listName} className={attribute.className}
-         id={attribute.listId}
-              onClick={attribute.onClickEventSuccessFunction}>
+            id={attribute.listId}
+            onClick={attribute.onClickEventSuccessFunction}>
             <i className={attribute.iconClassName} />
             <p className={attribute.paragraphClassName}>
                 {attribute.listName}

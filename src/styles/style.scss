@@ -44,7 +44,6 @@ input[type=date]::-webkit-inner-spin-button, input[type=date]::-webkit-clear-but
   margin: auto;
   height:16px;
   font-size: 13px;
-  display: none;
   background-color: transparent;
   border: 1px solid #3a6bff;
   color: inherit;
@@ -191,6 +190,7 @@ nav.topnav {
   .task-content {
     height: 100%;
     width: 75%;
+    transition: width 0.40s;
   ul.list {
     @include nav-ul();
   }
@@ -326,16 +326,20 @@ nav.topnav {
     }
   }
 }
+.task-content-full-width {
+  width:100%;
+  transition: width 0.40s;
+}
+
 }
 .show-todo {
   display: inline-flex;
 }
 
 .task-description {
-  width: 30%;
+  width: 0%;
   overflow: hidden;
   background-color: #ededed;
-  //transform: translateX(110%);
   transition: width 0.40s;
   a:link,
   a:visited {
@@ -426,13 +430,11 @@ nav.topnav {
     .repeat-selection {
       width: 32%;
       margin: auto;
-      border: none;
       background: transparent;
       border: 1px solid #3a6bff;
       font-size: 15.5px;
       color: inherit;
       border-radius: 5px;
-      display: none;
       outline:none;
     }
     .display-inline-block {
@@ -498,7 +500,6 @@ nav.topnav {
 
 .desc-open {
   width: 30%;
-  transform: translateX(0%);
   transition: width 0.40s;
   display: inline;
 }

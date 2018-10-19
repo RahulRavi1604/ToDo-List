@@ -9,9 +9,9 @@ class App extends React.Component {
   public render() {
     return (
       <div className="App">
-       <Header/>
-       <TopNav/>
-       <SideNav/>
+        <Header />
+        <TopNav />
+        <SideNav />
       </div>
     );
   }

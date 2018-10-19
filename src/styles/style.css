@@ -562,6 +562,8 @@ nav.topnav li.topnav-center .search-input::placeholder {
 .todo .task-content {
   height: 100%;
   width: 75%;
+  -webkit-transition: width 0.40s;
+  transition: width 0.40s;
 }
 
 .todo .task-content ul.list {
@@ -737,6 +739,12 @@ nav.topnav li.topnav-center .search-input::placeholder {
   cursor: pointer;
 }
 
+.todo .task-content-full-width {
+  width: 100%;
+  -webkit-transition: width 0.40s;
+  transition: width 0.40s;
+}
+
 .show-todo {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -744,7 +752,7 @@ nav.topnav li.topnav-center .search-input::placeholder {
 }
 
 .task-description {
-  width: 30%;
+  width: 0%;
   overflow: hidden;
   background-color: #ededed;
   -webkit-transition: width 0.40s;
@@ -853,7 +861,6 @@ nav.topnav li.topnav-center .search-input::placeholder {
   margin: auto;
   height: 16px;
   font-size: 13px;
-  display: none;
   background-color: transparent;
   border: 1px solid #3a6bff;
   color: inherit;
@@ -867,7 +874,6 @@ nav.topnav li.topnav-center .search-input::placeholder {
   margin: auto;
   height: 16px;
   font-size: 13px;
-  display: none;
   background-color: transparent;
   border: 1px solid #3a6bff;
   color: inherit;
@@ -880,13 +886,11 @@ nav.topnav li.topnav-center .search-input::placeholder {
 .task-description .settings .repeat-selection {
   width: 32%;
   margin: auto;
-  border: none;
   background: transparent;
   border: 1px solid #3a6bff;
   font-size: 15.5px;
   color: inherit;
   border-radius: 5px;
-  display: none;
   outline: none;
 }
 
@@ -976,8 +980,6 @@ nav.topnav li.topnav-center .search-input::placeholder {
 
 .desc-open {
   width: 30%;
-  -webkit-transform: translateX(0%);
-          transform: translateX(0%);
   -webkit-transition: width 0.40s;
   transition: width 0.40s;
   display: inline;

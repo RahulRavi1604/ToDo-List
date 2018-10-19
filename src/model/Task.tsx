@@ -4,14 +4,14 @@ class Task {
     private addedToDay: boolean;
     private note: string;
     private createdDate: Date;
-    private dueDate: Date | null;
-    private reminderDate: Date | null;
+    private dueDate: Date | undefined;
+    private reminderDate: Date | undefined;
     private completed: boolean;
     private important: boolean;
     private repeat: string;
     private active : boolean;
-    constructor(id : number, name : string, addedToDay : boolean, note : string, createdDate : Date, dueDate : Date | null,
-             reminderDate : Date | null, completed :boolean, important : boolean, repeat : string) {
+    constructor(id : number, name : string, addedToDay : boolean, note : string, createdDate : Date, dueDate : Date | undefined,
+             reminderDate : Date | undefined, completed :boolean, important : boolean, repeat : string) {
         this.id = id;
         this.name = name;
         this.addedToDay = addedToDay;
@@ -53,13 +53,13 @@ class Task {
     public setCreatedDate(createdDate: Date) {
         this.createdDate = createdDate;
     }
-    public getDueDate(): Date | null {
+    public getDueDate(): Date | undefined {
         return this.dueDate;
     }
     public setDueDate(dueDate: Date) {
         this.dueDate = dueDate;
     }
-    public getReminderDate(): Date | null {
+    public getReminderDate(): Date | undefined {
         return this.reminderDate;
     }
     public setReminderDate(reminderDate: Date) {

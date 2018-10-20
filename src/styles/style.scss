@@ -33,7 +33,7 @@ button {
 p {
   margin: auto;
 }
-input[type=date]::-webkit-inner-spin-button, input[type=date]::-webkit-clear-button {
+input[type=date]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   display: none;
 }
@@ -106,7 +106,7 @@ nav.topnav {
 }
 
 .page-content {
-  height: 94%;
+  height: 92%;
   display: inline-flex;
   overflow: hidden;
   width: 100%;
@@ -247,6 +247,27 @@ nav.topnav {
     @include nav-ul;
     width: 100%;
     padding-left: 0px;
+    li span.note:after {
+      font-family: FontAwesome;
+      content : "\f24a";
+     }
+     li span.reminder:after {
+      font-family: FontAwesome;
+      content : "\f0a2";
+     }
+     li span.due-date:after {
+      font-family: FontAwesome;
+      content : "\f133";
+     }
+     li span.repeat:after {
+      font-family: FontAwesome;
+      content : "\f01e";
+     }
+     li span.added-to-day:after {
+      font-family: FontAwesome;
+      content : "\f185";
+     }
+     
     li.task {
       transition: height 3s;
       padding: 20px 0px;

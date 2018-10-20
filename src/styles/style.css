@@ -353,7 +353,7 @@ p {
   margin: auto;
 }
 
-input[type=date]::-webkit-inner-spin-button, input[type=date]::-webkit-clear-button {
+input[type=date]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   display: none;
 }
@@ -435,7 +435,7 @@ nav.topnav li.topnav-center .search-input::placeholder {
 }
 
 .page-content {
-  height: 94%;
+  height: 92%;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -644,6 +644,35 @@ nav.topnav li.topnav-center .search-input::placeholder {
   list-style-type: none;
   width: 100%;
   padding-left: 0px;
+}
+
+.todo .task-content ul.tasks li div span {
+  margin: 5px;
+}
+
+.todo .task-content ul.tasks li span.note:after {
+  font-family: FontAwesome;
+  content: "\f24a";
+}
+
+.todo .task-content ul.tasks li span.reminder:after {
+  font-family: FontAwesome;
+  content: "\f0a2";
+}
+
+.todo .task-content ul.tasks li span.due-date:after {
+  font-family: FontAwesome;
+  content: "\f133";
+}
+
+.todo .task-content ul.tasks li span.repeat:after {
+  font-family: FontAwesome;
+  content: "\f01e";
+}
+
+.todo .task-content ul.tasks li span.added-to-day:after {
+  font-family: FontAwesome;
+  content: "\f185";
 }
 
 .todo .task-content ul.tasks li.task {

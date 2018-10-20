@@ -71,15 +71,13 @@ class SideNav extends React.Component<{}, {
     }
   };
   public deleteCurrentList = (): void => {
+    Store.deleteList(this.state.activeListIndex);
     this.setState({
       activeListIndex: -1,
-      store: Store.deleteList(this.state.activeListIndex),
     });
   }
   public deleteCurrentTask = (taskId: number): void => {
-    this.setState({
-      store: Store.deleteTask(this.state.activeListIndex, taskId)
-    });
+    Store.deleteTask(this.state.activeListIndex, taskId)
   }
   public addToDay = (taskId: number): void => {
     this.setState({
@@ -180,7 +178,7 @@ class SideNav extends React.Component<{}, {
         </nav>
         <MyDay />
         <ToDo listName={activeListIndex !== -1 ? Store.getListById(this.state.activeListIndex).getName() :
-          "Select"} listId={activeListIndex}
+          "Select a List"} listId={activeListIndex}
           tasks={activeListIndex !== -1 ? Store.getListById(activeListIndex).getTasks() : []}
           updateNumberOfTasks={this.updateNumberOfTasks} renameList={this.renameList}
           toggleTaskStatus={this.toggleTaskStatus} toggleTaskImportant={this.toggleTaskImportant}

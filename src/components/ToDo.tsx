@@ -12,7 +12,7 @@ class ToDo extends React.Component<{
   updateNumberOfTasks: (listId: number) => void,
   toggleTaskStatus: (taskId: number) => void,
   toggleTaskImportant: (taskId: number) => void,
-  addToDay: (activeTaskIndex: number) => void
+  addToDay: (activeTaskIndex: number) => void,
   updateReminder: (taskId: number, inputDate: Date) => void,
   updateDueDate: (taskId: number, inputDate: Date) => void,
   updateRepeat: (taskId: number, inputValue: string) => void,
@@ -113,6 +113,10 @@ class ToDo extends React.Component<{
     })
   }
   public addNewTask = () => {
+    if (this.props.listId === -1) {
+      alert ("Select a list to add Tasks! :)");
+      return;
+    }
     const inputText = this.state.taskInputValue;
     Store.addNewTask(this.props.listId, inputText);
     this.props.updateNumberOfTasks(this.props.listId);
@@ -122,6 +126,7 @@ class ToDo extends React.Component<{
       });
     }
   }
+  
   public render() {
     const { isDescriptionExpanded, taskInputValue } = this.state;
     const { listName, tasks, deleteCurrentList, renameList } = this.props;

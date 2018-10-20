@@ -5,7 +5,7 @@ import Task from '../model/Task';
 class TaskDescription extends React.Component<{
   task: Task, renameTask: (taskInput: string) => void,
   toggleStatus: (event: any) => void, toggleImportant: (event: any) => void, addToDay: () => void
-  , updateReminder: (inputDate: Date) => void, updateDueDate: (inputDate: Date) => void,
+  , updateReminder: (inputDate: Date | null) => void, updateDueDate: (inputDate: Date | null) => void,
   updateRepeat: (inputValue: string) => void, updateNote: (inputValue: string) => void,
   isDescriptionExpanded: boolean, closeTaskDescriptionWindow: () => void
   , deleteCurrentTask: () => void
@@ -27,10 +27,18 @@ class TaskDescription extends React.Component<{
     this.props.renameTask(taskInput);
   }
   public updateDueDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.updateDueDate(new Date(event.currentTarget.value));
+    if (event.currentTarget.value !== "") {
+      this.props.updateDueDate(new Date(event.currentTarget.value));
+    } else {
+      this.props.updateDueDate(null);
+    }
   }
   public updateReminder = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.updateReminder(new Date(event.currentTarget.value));
+    if (event.currentTarget.value !== "") {
+      this.props.updateReminder(new Date(event.currentTarget.value));
+    } else {
+      this.props.updateReminder(null);
+    }
   }
   public updateRepeat = (event: React.ChangeEvent<HTMLSelectElement>) => {
     this.props.updateRepeat(event.currentTarget.value);
@@ -42,13 +50,17 @@ class TaskDescription extends React.Component<{
     });
   }
   public convertDateFormat = (inputDate: Date) => {
-    let day = inputDate.getDate().toString();
-    day = day.length === 1 && day !== "0" ? 0 + day : day;
-    let month = (inputDate.getMonth() + 1).toString();
-    month = month.length === 1 && month !== "0" ? 0 + month : month;
-    const year = inputDate.getFullYear().toString();
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
+    if (inputDate != null) {
+      let day = inputDate.getDate().toString();
+      day = day.length === 1 && day !== "0" ? 0 + day : day;
+      let month = (inputDate.getMonth() + 1).toString();
+      month = month.length === 1 && month !== "0" ? 0 + month : month;
+      const year = inputDate.getFullYear().toString();
+      const formattedDate = `${year}-${month}-${day}`;
+      return formattedDate;
+    } else {
+      return "";
+    }
   }
   public render() {
     const { noteLetterCount } = this.state;
@@ -57,7 +69,7 @@ class TaskDescription extends React.Component<{
       <div className={`task-description${isDescriptionExpanded ? " desc-open" : ""}`}>
         <div className="card task-details">
           <i className={"task-status" + (task.isCompleted() ? " fa fa-check-circle" : " fa fa-circle-thin")} onClick={toggleStatus} />
-          <textarea className="task-text" value={task.getName()} onChange={this.renameTask} />
+          <textarea className="task-text" value={task.getName()} onChange={this.renameTask} maxLength={70}/>
           <i className={"task-important" + (task.isImportant() ? " fa fa-star" : " fa fa-star-o")} onClick={toggleImportant} />
         </div>
         <div className="card add-to-day">

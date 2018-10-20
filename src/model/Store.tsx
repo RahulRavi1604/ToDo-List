@@ -28,7 +28,7 @@ class Store {
 
   public addNewList(listName: string): List[] {
     this.store.push(new List(
-      this.store.length === 0 ? 0 :  this.store[this.store.length - 1].getId() + 1 ,
+      this.store.length === 0 ? 0 : this.store[this.store.length - 1].getId() + 1,
       listName, 0, [], false));
     return this.store;
   }
@@ -39,12 +39,14 @@ class Store {
   }
   public addNewTask(listId: number, taskName: string): Task[] {
     this.getListById(listId).getTasks().push(new Task(this.getListById(listId).getTasks().length === 0 ?
-     0 :  this.getListById(listId).getTasks()[this.getListById(listId).getTasks().length -1].getId() + 1
+      0 : this.getListById(listId).getTasks()[this.getListById(listId).getTasks().length - 1].getId() + 1
       , taskName, false, "", new Date(), undefined, undefined, false, false, ""));
     return this.getListById(listId).getTasks();
   }
-  public renameList(listIndex: number, newListName: string): List[] {
-    this.getListById(listIndex).setName(newListName);
+  public renameList(listId: number, newListName: string): List[] {
+    if (listId > 0) {
+      this.getListById(listId).setName(newListName);
+    }
     return this.store;
   }
   public renameTask(listId: number, taskId: number, newTaskName: string) {
@@ -80,65 +82,67 @@ class Store {
       });
     });
   }
-  public toggleTaskCompleted(activeListIndex: number, taskId: number) {
-    this.store[activeListIndex].getTasks()[taskId].setCompleted(
-      !this.store[activeListIndex].getTasks()[taskId].isCompleted()
+  public toggleTaskCompleted(listId: number, taskId: number) {
+    this.getTaskById(listId, taskId).setCompleted(
+      !this.getTaskById(listId, taskId).isCompleted()
     );
     return this.store;
   }
-  public toggleTaskImportant(activeListIndex: number, taskId: number) {
-    this.store[activeListIndex].getTasks()[taskId].setImportant(
-      !this.store[activeListIndex].getTasks()[taskId].isImportant()
+  public toggleTaskImportant(listId: number, taskId: number) {
+    this.getTaskById(listId, taskId).setImportant(
+      !this.getTaskById(listId, taskId).isImportant()
     );
     return this.store;
   }
-  public toggleAddToDay(activeListIndex: number, taskId: number) {
-    this.store[activeListIndex].getTasks()[taskId].setAddedToDay(
-      !this.store[activeListIndex].getTasks()[taskId].isAddedToDay()
+  public toggleAddToDay(listId: number, taskId: number) {
+    this.getTaskById(listId, taskId).setAddedToDay(
+      !this.getTaskById(listId, taskId).isAddedToDay()
     );
     return this.store;
   }
   public updateDueDate = (listId: number, taskId: number, inputDate: Date): List[] => {
-    this.getTaskById(listId,taskId).setDueDate(inputDate);
+    this.getTaskById(listId, taskId).setDueDate(inputDate);
     return this.store;
   }
   public updateReminder = (listId: number, taskId: number, inputDate: Date): List[] => {
-    this.getTaskById(listId,taskId).setReminderDate(inputDate);
+    this.getTaskById(listId, taskId).setReminderDate(inputDate);
     return this.store;
   }
   public updateRepeat = (listId: number, taskId: number, inputValue: string): List[] => {
-    this.getTaskById(listId,taskId).setRepeat(inputValue);
+    this.getTaskById(listId, taskId).setRepeat(inputValue);
     return this.store;
   }
   public updateNote = (listId: number, taskId: number, inputValue: string): List[] => {
-    this.getTaskById(listId,taskId).setNote(inputValue);
+    this.getTaskById(listId, taskId).setNote(inputValue);
     return this.store;
   }
-  public deleteList = (listId : number) : List[] => {
-    this.store.splice(listId, 1);
-    return this.store;
+  public deleteList = (listId: number): void => {
+    if (listId > 0) {
+      this.store.splice(listId, 1);
+    }
   }
-  public deleteTask = (listId : number, taskId : number) : List[] => {
+  public deleteTask = (listId: number, taskId: number): void => {
     this.getListById(listId).getTasks().splice(taskId, 1);
-    return this.store;
   }
-  public getListById = (listId : number) : any => {
-    let resultList; 
+  public getListById = (listId: number): any => {
+    let resultList;
     this.store.forEach((list) => {
-       if (listId === list.getId()) {
-          resultList = list;
-       }
+      if (listId === list.getId()) {
+        resultList = list;
+      }
     });
     return resultList;
   }
-  public getTaskById = (listId : number, taskId : number) : any => {
-    let resultTask; 
-      this.getListById(listId).getTasks().forEach((task : Task) => {
-       if (taskId === task.getId()) {
-          resultTask = task;
-       }
-      });
+  public getTaskById = (listId: number, taskId: number): any => {
+    let resultTask;
+    this.getListById(listId).getTasks().forEach((task: Task) => {
+      if (taskId === task.getId()) {
+        resultTask = task;
+      }
+    });
     return resultTask;
   }
 }
+
+
 export default new Store();

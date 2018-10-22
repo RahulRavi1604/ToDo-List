@@ -19,6 +19,7 @@ class TaskDescription extends React.Component<{
       taskInputValue: "",
     };
   }
+
   public renameTask = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const taskInput = event.currentTarget.value;
     this.setState({
@@ -75,7 +76,7 @@ class TaskDescription extends React.Component<{
         <div className="card add-to-day">
           <button onClick={addToDay}>
             <i className="fa fa-sun-o" />
-            <p className="m-l-20 add-to-day-button">{task.isAddedToDay() ?
+            <p className="m-l-20 add-to-day-button"> {task.isAddedToDay() ?
               "Added To Day " + this.convertDateFormat(new Date()) : "Add To Day"}</p>
           </button>
         </div>
@@ -90,7 +91,7 @@ class TaskDescription extends React.Component<{
           <div className="add-due-date">
             <i className="fa fa-calendar" />
             <p className="m-l-20">Add due date</p>
-            <input value={task.getDueDate() === undefined ? " " : this.convertDateFormat(task.getDueDate()!)}
+            <input value={!task.getDueDate() ? " " : this.convertDateFormat(task.getDueDate()!)}
               type="date" id="due-date-picker" className="due-date-picker" onChange={this.updateDueDate} />
           </div>
           <div className="add-repeat">

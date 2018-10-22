@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import Store from '../model/Store';
+import * as Actions from '../actions/Actions';
 import Task from '../model/Task';
+import Store from '../stores/TodoStore';
+import todoStore from '../stores/TodoStore';
 import TaskDescription from './TaskDescription';
 import Tasks from './Tasks';
 
@@ -9,7 +11,6 @@ class ToDo extends React.Component<{
   listName: string, tasks: Task[], listId: number,
   renameList: (element: React.FormEvent<HTMLInputElement>) => void,
   renameTask: (taskInput: string, activeTaskIndex: number) => void,
-  updateNumberOfTasks: (listId: number) => void,
   toggleTaskStatus: (taskId: number) => void,
   toggleTaskImportant: (taskId: number) => void,
   addToDay: (activeTaskIndex: number) => void,
@@ -18,6 +19,7 @@ class ToDo extends React.Component<{
   updateRepeat: (taskId: number, inputValue: string) => void,
   updateNote: (taskId: number, inputValue: string) => void
   deleteCurrentList: () => void, deleteCurrentTask: (taskId: number) => void,
+  store: any
 }, { taskInputValue: string, activeTaskIndex: number, listId: number, isDescriptionExpanded: boolean }> {
 
 
@@ -25,7 +27,7 @@ class ToDo extends React.Component<{
     if (prevState !== undefined && props.listId !== prevState.listId) {
       return {
         activeTaskIndex: -1,
-        isDescriptionExpanded : false,
+        isDescriptionExpanded: false,
         listId: props.listId,
       };
     }
@@ -35,11 +37,26 @@ class ToDo extends React.Component<{
     super(props);
     this.state = {
       activeTaskIndex: -1,
-      isDescriptionExpanded : false,
+      isDescriptionExpanded: false,
       listId: this.props.listId,
       taskInputValue: "",
     };
   }
+
+  public addNewTask = () => {
+    if (this.props.listId === -1) {
+      alert("Select a list to add Tasks! :)");
+      return;
+    }
+    const inputText = this.state.taskInputValue;
+    Actions.addNewTask(this.props.listId, inputText);
+    if (inputText !== "") {
+      this.setState({
+        taskInputValue: ""
+      });
+    }
+  }
+
 
   public deleteCurrentTask = () => {
     this.props.deleteCurrentTask(this.state.activeTaskIndex);
@@ -112,21 +129,15 @@ class ToDo extends React.Component<{
       taskInputValue: element.currentTarget.value
     })
   }
-  public addNewTask = () => {
-    if (this.props.listId === -1) {
-      alert ("Select a list to add Tasks! :)");
-      return;
-    }
-    const inputText = this.state.taskInputValue;
-    Store.addNewTask(this.props.listId, inputText);
-    this.props.updateNumberOfTasks(this.props.listId);
-    if (inputText !== "") {
-      this.setState({
-        taskInputValue: ""
-      });
-    }
+
+  public componentDidMount() {
+    todoStore.on("taskAdded", this.addTask);
   }
-  
+
+  public addTask = () => {
+    this.setState({ taskInputValue: "" })
+  };
+
   public render() {
     const { isDescriptionExpanded, taskInputValue } = this.state;
     const { listName, tasks, deleteCurrentList, renameList } = this.props;
@@ -157,7 +168,7 @@ class ToDo extends React.Component<{
           </ul>
         </div>
         <TaskDescription task={this.state.activeTaskIndex !== -1 ? Store.getTaskById(this.props.listId, this.state.activeTaskIndex)
-          : new Task(0, "", false, "", new Date(), undefined, undefined, false, false, "")} renameTask={this.renameTask}
+          : new Task(0, "", false, "", new Date(), false, false, "")} renameTask={this.renameTask}
           toggleStatus={this.toggleCurrentTaskStatus} toggleImportant={this.toggleCurrentTaskImportant}
           addToDay={this.addToDay} updateDueDate={this.updateDueDate} updateNote={this.updateNote}
           updateReminder={this.updateReminder} updateRepeat={this.updateRepeat}

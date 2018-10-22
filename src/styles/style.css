@@ -513,7 +513,7 @@ nav.topnav li.topnav-center .search-input::placeholder {
 .sidebar .add-list-li input {
   border: none;
   outline: none;
-  width: 100%;
+  width: 95%;
   height: 100%;
   font-size: 16px;
   color: #737373;
@@ -646,8 +646,9 @@ nav.topnav li.topnav-center .search-input::placeholder {
   padding-left: 0px;
 }
 
-.todo .task-content ul.tasks li div span {
-  margin: 5px;
+.todo .task-content ul.tasks li span {
+  margin-right: 15px;
+  float: right;
 }
 
 .todo .task-content ul.tasks li span.note:after {

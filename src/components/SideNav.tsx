@@ -1,14 +1,16 @@
 import * as React from 'react';
-
+import { connect } from 'react-redux';
+import * as Actions from '../actions/Actions';
 import List from '../model/List';
-import Store from '../model/Store';
+import Store from '../stores/TodoStore';
+import todoStore from '../stores/TodoStore';
 import IListAttribute from './IListAttribute';
 import ListItem from './ListItem';
 import Lists from './Lists';
 import MyDay from './MyDay';
 import ToDo from './ToDo';
 
-class SideNav extends React.Component<{}, {
+class SideNav extends React.Component<{ store: any }, {
   listInputValue: string,
   isSidenavExpanded: boolean, store: List[], activeListIndex: number
 }> {
@@ -25,7 +27,7 @@ class SideNav extends React.Component<{}, {
     },
     {
       active: false,
-      className: "important-li",// + (this.state.activeLi === "important" ? ' active' : ''),
+      className: "important-li",
       iconClassName: "fa fa-star-o m-y-auto  m-l-20",
       listName: "Important",
       numberOfTasks: 0,
@@ -34,7 +36,7 @@ class SideNav extends React.Component<{}, {
     },
     {
       active: false,
-      className: "planned-li",//  + (this.state.activeLi === "planned" ? ' active' : ''),
+      className: "planned-li",
       iconClassName: "fa fa-calendar m-y-auto  m-l-20",
       listName: "Planned",
       numberOfTasks: 0,
@@ -43,7 +45,7 @@ class SideNav extends React.Component<{}, {
     },
     {
       active: false,
-      className: "tasks-li",// + (this.state.activeLi === "tasks" ? ' active' : ''),
+      className: "tasks-li",
       iconClassName: "fa fa-home sidenav-blue m-y-auto  m-l-20",
       listName: "Tasks",
       numberOfTasks: 0,
@@ -57,19 +59,30 @@ class SideNav extends React.Component<{}, {
       activeListIndex: -1,
       isSidenavExpanded: true,
       listInputValue: "",
-      store: Store.getStore()
+      store: todoStore.getStore()
     };
   }
+
+  public componentDidMount() {
+    todoStore.on("listAdded", this.addList);
+  }
+
+  public componentWillUnmount() {
+    todoStore.removeListener("listAdded", this.addList);
+  }
+
+  public addList = () => {
+    this.setState({ store: todoStore.getStore(), listInputValue: "" })
+  };
 
   public addNewList = () => {
     const inputText = this.state.listInputValue;
     if (inputText !== "") {
-      this.setState({
-        listInputValue: "",
-        store: Store.addNewList(inputText)
-      });
+      this.props.store.dispatch(Actions.addNewList(inputText));
+      this.setState({ listInputValue: "" });
     }
   };
+
   public deleteCurrentList = (): void => {
     Store.deleteList(this.state.activeListIndex);
     this.setState({
@@ -145,11 +158,7 @@ class SideNav extends React.Component<{}, {
       { store: Store.renameTask(this.state.activeListIndex, taskId, taskInput) }
     );
   }
-  public updateNumberOfTasks = (listId: number) => {
-    this.setState({
-      store: Store.incrementNumberOfTasks(listId)
-    })
-  }
+
   public render() {
     const { isSidenavExpanded, activeListIndex, listInputValue, store } = this.state;
     return (
@@ -180,13 +189,13 @@ class SideNav extends React.Component<{}, {
         <ToDo listName={activeListIndex !== -1 ? Store.getListById(this.state.activeListIndex).getName() :
           "Select a List"} listId={activeListIndex}
           tasks={activeListIndex !== -1 ? Store.getListById(activeListIndex).getTasks() : []}
-          updateNumberOfTasks={this.updateNumberOfTasks} renameList={this.renameList}
+          renameList={this.renameList}
           toggleTaskStatus={this.toggleTaskStatus} toggleTaskImportant={this.toggleTaskImportant}
           renameTask={this.renameTask} addToDay={this.addToDay} updateDueDate={this.updateDueDate}
           updateReminder={this.updateReminder} updateRepeat={this.updateRepeat} updateNote={this.updateNote}
-          deleteCurrentList={this.deleteCurrentList} deleteCurrentTask={this.deleteCurrentTask} />
+          deleteCurrentList={this.deleteCurrentList} deleteCurrentTask={this.deleteCurrentTask} store={this.props.store} />
       </div>
     );
   }
 }
-export default SideNav;
+export default connect()(SideNav);

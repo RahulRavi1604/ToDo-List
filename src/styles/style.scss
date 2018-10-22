@@ -165,7 +165,7 @@ nav.topnav {
       input {
         border: none;
         outline: none;
-        width: 100%;
+        width: 95%;
         height: 100%;
         font-size: 16px;
         color: #737373;
@@ -247,6 +247,10 @@ nav.topnav {
     @include nav-ul;
     width: 100%;
     padding-left: 0px;
+    li span {
+      margin-right: 15px;
+      float:right;
+    }
     li span.note:after {
       font-family: FontAwesome;
       content : "\f24a";

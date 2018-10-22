@@ -3,19 +3,19 @@ import Task from './Task';
 
 class Store {
   private store: List[] = [new List(0, "list1", 2,
-    [new Task(0, "Task 11", false, "", new Date(), undefined, undefined, false, false, "")
-      , new Task(1, "Task 12", false, "", new Date(), undefined, undefined, false, false, "")
+    [new Task(0, "Task 11", false, "", new Date(), false, false, "")
+      , new Task(1, "Task 12", false, "", new Date(),false, false, "")
     ],
     false),
   new List(1, "list2", 1,
-    [new Task(0, "Task 2", false, "", new Date(), undefined, undefined, false, false, "")],
+    [new Task(0, "Task 2", false, "", new Date(), false, false, "")],
     false),
   new List(2, "list3", 0, [], false),
   new List(3, "list4", 1,
-    [new Task(0, "Task 4", false, "", new Date(), undefined, undefined, false, false, "")],
+    [new Task(0, "Task 4", false, "", new Date(), false, false, "")],
     false),
   new List(4, "list5", 1,
-    [new Task(0, "Task 5", false, "", new Date(), undefined, undefined, false, false, "")],
+    [new Task(0, "Task 5", false, "", new Date(), false, false, "")],
     false)
   ];
 
@@ -40,7 +40,7 @@ class Store {
   public addNewTask(listId: number, taskName: string): Task[] {
     this.getListById(listId).getTasks().push(new Task(this.getListById(listId).getTasks().length === 0 ?
       0 : this.getListById(listId).getTasks()[this.getListById(listId).getTasks().length - 1].getId() + 1
-      , taskName, false, "", new Date(), undefined, undefined, false, false, ""));
+      , taskName, false, "", new Date(), false, false, ""));
     return this.getListById(listId).getTasks();
   }
   public renameList(listId: number, newListName: string): List[] {

@@ -1,20 +1,21 @@
-// import dispatcher from '../dispatcher/dispatcher';
-
 export const ACTION_TYPES = {
     ADD_LIST: 'addList',
     ADD_TASK: 'addTask',
+    SET_ACTIVE_LIST: 'setActiveList',
 };
 
-export function addNewList(inputText : string) : {type : string, value : string} {
-    return({
-        type: ACTION_TYPES.ADD_LIST,
-        value: inputText
-    })
-}
-export function addNewTask(listId : number ,inputText : string) : {} {
-    return({
+export const addNewList = (inputText: string) => ({
+    type: ACTION_TYPES.ADD_LIST,
+    value: inputText
+})
+export const addNewTask = (listId: number, inputText: string) => (
+    {
         listId,
         type: ACTION_TYPES.ADD_TASK,
         value: inputText,
     })
-}
+export const setActiveList = (listId: number) => (
+    {
+        listId,
+        type: ACTION_TYPES.SET_ACTIVE_LIST,
+    })

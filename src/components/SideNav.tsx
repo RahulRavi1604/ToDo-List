@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import * as Actions from '../actions/Actions';
 import List from '../model/List';
 import Store from '../stores/TodoStore';
-import todoStore from '../stores/TodoStore';
 import IListAttribute from './IListAttribute';
 import ListItem from './ListItem';
 import Lists from './Lists';
 import MyDay from './MyDay';
 import ToDo from './ToDo';
 
-class SideNav extends React.Component<{ store: any }, {
-  listInputValue: string,
-  isSidenavExpanded: boolean, store: List[], activeListIndex: number
-}> {
-
+class SideNav extends React.Component<{
+  data: List[],addList: (inputText: string) => void, setActiveList: (listId: number) => void,}, {
+    listInputValue: string,
+    isSidenavExpanded: boolean, store: List[], activeListIndex: number
+  }> {
   private mainList: IListAttribute[] = [
     {
       active: false,
@@ -59,27 +59,15 @@ class SideNav extends React.Component<{ store: any }, {
       activeListIndex: -1,
       isSidenavExpanded: true,
       listInputValue: "",
-      store: todoStore.getStore()
+      store: this.props.data
     };
   }
-
-  public componentDidMount() {
-    todoStore.on("listAdded", this.addList);
-  }
-
-  public componentWillUnmount() {
-    todoStore.removeListener("listAdded", this.addList);
-  }
-
-  public addList = () => {
-    this.setState({ store: todoStore.getStore(), listInputValue: "" })
-  };
 
   public addNewList = () => {
     const inputText = this.state.listInputValue;
     if (inputText !== "") {
-      this.props.store.dispatch(Actions.addNewList(inputText));
       this.setState({ listInputValue: "" });
+      this.props.addList(inputText);
     }
   };
 
@@ -143,10 +131,10 @@ class SideNav extends React.Component<{ store: any }, {
   }
   public handleOnClickList = (event: any) => {
     const listElementId = parseInt(this.getTargetListId(event), 10);
-    Store.setActiveList(listElementId);
-    this.setState(
-      { activeListIndex: listElementId }
-    );
+    this.props.setActiveList(listElementId);
+    this.setState({
+      activeListIndex: listElementId
+    });
   }
   public renameList = (element: React.FormEvent<HTMLInputElement>) => {
     this.setState(
@@ -158,9 +146,18 @@ class SideNav extends React.Component<{ store: any }, {
       { store: Store.renameTask(this.state.activeListIndex, taskId, taskInput) }
     );
   }
+  public getListById = (listId: number): any => {
+    let resultList;
+    this.state.store.forEach((list) => {
+      if (listId === list.getId()) {
+        resultList = list;
+      }
+    });
+    return resultList;
+  }
 
   public render() {
-    const { isSidenavExpanded, activeListIndex, listInputValue, store } = this.state;
+    const { isSidenavExpanded, activeListIndex, listInputValue } = this.state;
     return (
       <div className="page-content">
         <nav className={`sidebar ${isSidenavExpanded ? "" : "sidebar-collapse"}`}>
@@ -173,7 +170,7 @@ class SideNav extends React.Component<{ store: any }, {
             {this.mainList.map(ListItem)}
             <li>
               <ul className="lists">
-                <Lists lists={store} handleOnClickList={this.handleOnClickList} />
+                <Lists lists={this.state.store} handleOnClickList={this.handleOnClickList} />
                 <li className="add-list-li">
                   <i className="fa fa-plus sidenav-blue m-y-auto  m-l-20 add-list" onClick={this.addNewList} />
                   <p className="m-l-20 sidenav-blue">
@@ -186,16 +183,28 @@ class SideNav extends React.Component<{ store: any }, {
           </ul>
         </nav>
         <MyDay />
-        <ToDo listName={activeListIndex !== -1 ? Store.getListById(this.state.activeListIndex).getName() :
+        <ToDo listName={activeListIndex !== -1 ? this.getListById(this.state.activeListIndex).getName() :
           "Select a List"} listId={activeListIndex}
-          tasks={activeListIndex !== -1 ? Store.getListById(activeListIndex).getTasks() : []}
+          tasks={activeListIndex !== -1 ? this.getListById(activeListIndex).getTasks() : []}
           renameList={this.renameList}
           toggleTaskStatus={this.toggleTaskStatus} toggleTaskImportant={this.toggleTaskImportant}
           renameTask={this.renameTask} addToDay={this.addToDay} updateDueDate={this.updateDueDate}
           updateReminder={this.updateReminder} updateRepeat={this.updateRepeat} updateNote={this.updateNote}
-          deleteCurrentList={this.deleteCurrentList} deleteCurrentTask={this.deleteCurrentTask} store={this.props.store} />
+          deleteCurrentList={this.deleteCurrentList} deleteCurrentTask={this.deleteCurrentTask} />
       </div>
     );
   }
 }
-export default connect()(SideNav);
+const mapDispatchToProps = (dispatch: Dispatch<{}>, ownProps: any) => {
+  console.log(ownProps);
+  return {
+    addList: (inputText: string) => dispatch(Actions.addNewList(inputText)),
+    setActiveList: (listId: number) => dispatch(Actions.setActiveList(listId)),
+  }
+}
+const mapStateToProps = (state: any) => {
+  return {
+    data: state.store
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SideNav);

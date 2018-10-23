@@ -19,7 +19,6 @@ class ToDo extends React.Component<{
   updateRepeat: (taskId: number, inputValue: string) => void,
   updateNote: (taskId: number, inputValue: string) => void
   deleteCurrentList: () => void, deleteCurrentTask: (taskId: number) => void,
-  store: any
 }, { taskInputValue: string, activeTaskIndex: number, listId: number, isDescriptionExpanded: boolean }> {
 
 

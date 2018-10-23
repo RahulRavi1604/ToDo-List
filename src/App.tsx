@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './styles/style.css';
 
+import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import Header from './components/Header';
 import SideNav from './components/SideNav';
@@ -11,13 +12,14 @@ const store = createStore(todoApp)
 
 class App extends React.Component {
   
-
   public render() {
     return (
       <div className="App">
         <Header />
         <TopNav />
-        <SideNav store = {store}/>
+        <Provider store = {store}>
+        <SideNav />
+        </Provider>
       </div>
     );
   }
